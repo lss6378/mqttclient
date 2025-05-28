@@ -38,7 +38,7 @@ int MQTTDeserialize_subscribe(unsigned char* dup, unsigned short* packetid, int 
 	MQTTHeader header = {0};
 	unsigned char* curdata = buf;
 	unsigned char* enddata = NULL;
-	int rc = -1;
+	int rc = MQTTPACKET_READ_ERROR;
 	int mylen = 0;
 
 	FUNC_ENTRY;
@@ -47,7 +47,11 @@ int MQTTDeserialize_subscribe(unsigned char* dup, unsigned short* packetid, int 
 		goto exit;
 	*dup = header.bits.dup;
 
-	curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+	rc = MQTTPacket_decodeBuf(curdata, &mylen); /* read remaining length */
+	if (rc <= 0)
+		goto exit;
+	curdata += rc;
+	rc = MQTTPACKET_READ_ERROR;
 	enddata = curdata + mylen;
 
 	*packetid = readInt(&curdata);
@@ -55,6 +59,8 @@ int MQTTDeserialize_subscribe(unsigned char* dup, unsigned short* packetid, int 
 	*count = 0;
 	while (curdata < enddata)
 	{
+		if (*count == maxcount)
+			goto exit;
 		if (!readMQTTLenString(&topicFilters[*count], &curdata, enddata))
 			goto exit;
 		if (curdata >= enddata) /* do we have enough data to read the req_qos version byte? */
