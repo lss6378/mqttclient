@@ -19,6 +19,8 @@
 
 // #define TEST_USEING_TLS  
 
+#define EMQX_HOST "emqx.logfun.xyz"
+
 static void topic1_handler(void* client, message_data_t* msg)
 {
     (void) client;
@@ -84,7 +86,9 @@ int main(void)
     mqtt_set_port(client, "1883");
 #endif
 
-    mqtt_set_host(client, "120.25.213.14");
+    // mqtt_set_host(client, "120.25.213.14");
+    // mqtt_set_host(client, "114.132.177.8");
+    mqtt_set_host(client, EMQX_HOST);
     mqtt_set_client_id(client, client_id);
     mqtt_set_user_name(client, user_name);
     mqtt_set_password(client, password);
@@ -95,6 +99,9 @@ int main(void)
     mqtt_subscribe(client, "topic1", QOS0, topic1_handler);
     mqtt_subscribe(client, "topic2", QOS1, NULL);
     mqtt_subscribe(client, "topic3", QOS2, NULL);
+
+    MQTT_LOG_I("HOST: %s", EMQX_HOST);
+    MQTT_LOG_I("client_id: %s, user_name: %s, password: %s", client_id, user_name, password);
     
     res = pthread_create(&thread1, NULL, mqtt_publish_thread, client);
     if(res != 0) {
