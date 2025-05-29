@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include "mqttclient.h"
 
-// #define TEST_USEING_TLS  
+// #define TEST_USEING_TLS
 
 static const char *test_baidu_ca_crt = {
     "-----BEGIN CERTIFICATE-----\r\n"
@@ -42,7 +42,7 @@ static void topic1_handler(void* client, message_data_t* msg)
 {
     (void) client;
     MQTT_LOG_I("-----------------------------------------------------------------------------------");
-    MQTT_LOG_I("%s:%d %s()...\ntopic: %s\nmessage:%s", __FILE__, __LINE__, __FUNCTION__, msg->topic_name, (char*)msg->message->payload);
+    MQTT_LOG_I("%s:%d %s()...\ntopic: %s\nmessage:%s", __FILE_NAME__, __LINE__, __FUNCTION__, msg->topic_name, (char*)msg->message->payload);
     MQTT_LOG_I("-----------------------------------------------------------------------------------");
 }
 
@@ -97,9 +97,9 @@ int main(void)
     mqtt_set_clean_session(client, 1);
 
     mqtt_connect(client);
-    
+
     mqtt_subscribe(client, "topic1", QOS0, topic1_handler);
-    
+
     res = pthread_create(&thread1, NULL, mqtt_publish_thread, client);
     if(res != 0) {
         MQTT_LOG_E("create mqtt publish thread fail");

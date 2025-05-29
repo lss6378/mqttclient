@@ -52,7 +52,7 @@ extern "C" {
 #define MBEDTLS_PARAM_FAILED_ALT
 #else /* MBEDTLS_PARAM_FAILED */
 #define MBEDTLS_PARAM_FAILED( cond ) \
-    mbedtls_param_failed( #cond, __FILE__, __LINE__ )
+    mbedtls_param_failed( #cond, __FILE_NAME__, __LINE__ )
 
 /**
  * \brief       User supplied callback function for parameter validation failure.

@@ -78,6 +78,11 @@
 #endif /* !_WIN32 || EFIX64 || EFI32 */
 #endif
 
+// 获取文件名
+#ifndef __FILE_NAME__
+    #define __FILE_NAME__    (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
+
 /*
  * Item in a verification chain: cert and flags for it
  */
@@ -2496,7 +2501,7 @@ int mbedtls_x509_crt_verify( mbedtls_x509_crt *crt,
                      int (*f_vrfy)(void *, mbedtls_x509_crt *, int, uint32_t *),
                      void *p_vrfy )
 {
-    printf("%s:%d %s()...\n", __FILE__, __LINE__, __FUNCTION__);
+    printf("%s:%d %s()...\n", __FILE_NAME__, __LINE__, __FUNCTION__);
     return( mbedtls_x509_crt_verify_restartable( crt, trust_ca, ca_crl,
                 &mbedtls_x509_crt_profile_default, cn, flags,
                 f_vrfy, p_vrfy, NULL ) );
@@ -2513,7 +2518,7 @@ int mbedtls_x509_crt_verify_with_profile( mbedtls_x509_crt *crt,
                      int (*f_vrfy)(void *, mbedtls_x509_crt *, int, uint32_t *),
                      void *p_vrfy )
 {
-    printf("%s:%d %s()...\n", __FILE__, __LINE__, __FUNCTION__);
+    printf("%s:%d %s()...\n", __FILE_NAME__, __LINE__, __FUNCTION__);
     return( mbedtls_x509_crt_verify_restartable( crt, trust_ca, ca_crl,
                 profile, cn, flags, f_vrfy, p_vrfy, NULL ) );
 }
@@ -2577,7 +2582,7 @@ int mbedtls_x509_crt_verify_restartable( mbedtls_x509_crt *crt,
 
     /* Build final flags, calling callback on the way if any */
     ret = x509_crt_merge_flags_with_cb( flags, &ver_chain, f_vrfy, p_vrfy );
-    
+
 exit:
 #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
     if( rs_ctx != NULL && ret != MBEDTLS_ERR_ECP_IN_PROGRESS )

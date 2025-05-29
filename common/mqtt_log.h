@@ -20,6 +20,12 @@ extern "C" {
 #define MQTT_LOG_INFO_LEVEL      (MQTT_LOG_WARN_LEVEL + 1)
 #define MQTT_LOG_DEBUG_LEVEL     (MQTT_LOG_INFO_LEVEL + 1)
 
+
+// 获取文件名
+#ifndef __FILE_NAME__
+    #define __FILE_NAME__    (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#endif
+
 #ifdef MQTT_LOG_IS_SALOF
     #include "salof.h"
 
@@ -30,7 +36,7 @@ extern "C" {
     #define mqtt_log_init   salof_init
 #else
     #include <stdio.h>
-    
+
 #if MQTT_LOG_LEVEL < MQTT_LOG_DEBUG_LEVEL
     #define MQTT_LOG_D(fmt, ...)
 #else

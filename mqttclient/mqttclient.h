@@ -130,7 +130,7 @@ typedef struct mqtt_client {
 
 
 #define MQTT_ROBUSTNESS_CHECK(item, err) if (!(item)) {                                         \
-        MQTT_LOG_E("%s:%d %s()... check for error.", __FILE__, __LINE__, __FUNCTION__);         \
+        MQTT_LOG_E("%s:%d %s()... check for error.", __FILE_NAME__, __LINE__, __FUNCTION__);         \
         return err; }
 
 #define MQTT_CLIENT_SET_DEFINE(name, type, res)         \
